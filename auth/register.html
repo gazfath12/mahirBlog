@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Account</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link rel="stylesheet" href="/styles/register.css">
+</head>
+<body>
+    <div class="container">
+        <div class="wrap-form" data-aos="zoom-in" data-aos-duration="1500">
+            <a href="../index.html" class="logo"><h1>Mahir Blog</h1></a>
+            <div >
+                <h3>Create Your Account</h3>
+                <form id="registerForm">
+                    <label for="email"> Email</label>
+                    <input type="email" id="email" name="email" placeholder="Masukan Email">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Masukan Password">
+                    <input type="submit" value="Register" onclick="registerAcount(event)">
+                    <span class="register">
+                        Sudah Punya Akun <a href="./login.html">Masuk</a>
+                    </span>
+                </form>
+            </div>
+        </div>
+        <div class="wrap-img" data-aos="zoom-in-up" data-aos-duration="1500">
+            <img src="../asets/register.svg" alt="register-img">
+        </div>
+    </div>
+  
+    <script>
+          AOS.init();
+        function registerAcount (event) {      
+            event.preventDefault()
+            
+            const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const formRegister = document.getElementById("registerForm")
+     
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+        if(email !== " " ||  password !== "") {
+            const  students =  dapatKanStudentDariLocalStorage();
+         
+           
+            const cekEmail =   students.some((student) => student.email === email)
+           
+            if (cekEmail) {
+       alert("email sudah terdaftar gunakan email yang lain") 
+        } else {
+            students.push({email: email,password: password})
+            alert("akun berhasil ditambahkan")
+            simpanStudentKeLocalStorage(students)
+            window.location = "./login.html"
+        }
+
+        document.forms["registerForm"].reset()
+        }
+        }
+        function simpanStudentKeLocalStorage(arg) {
+            localStorage.setItem("students",JSON.stringify(arg))
+        }
+        function dapatKanStudentDariLocalStorage() {
+            const students = localStorage.getItem("students")
+            return students ? JSON.parse(students) : []
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+           const sessionStudent = dapatKanSessionStudentDariLocalStorage() 
+           if (sessionStudent) {
+               alert("anda sudah login harus  logout terlebih dahulu")
+            window.location.href = "../admin/dashboard.html"
+           }
+           console.log(sessionStudent)
+         
+        })
+        function dapatKanSessionStudentDariLocalStorage() {
+            const sessionJSON = localStorage.getItem("session")
+            return sessionJSON ? JSON.parse(sessionJSON) : null;
+        }
+        
+    </script>
+</body>
+</html>

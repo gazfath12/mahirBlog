@@ -1,0 +1,176 @@
+@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Hedvig+Letters+Sans&family=Manrope:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+:root {
+  --primary: #407bff;
+  --secondary: #2d6fff;
+  --navbar :#2b2c34;
+}
+* {
+  font-family: "Roboto", sans-serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #407bff;
+  --secondary: #2d6fff;
+  --navbar: #3da9fc;
+}
+
+#sidebar {
+  position: fixed;
+  padding-top: 30px;
+  width: 250px;
+  height: 100%;
+  background-color: var(--primary);
+  display: none;
+}
+
+#sidebar h2 {
+  color: white;
+  text-align: center;
+  padding: 20px 0px;
+}
+
+#sidebar a {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  text-decoration: none;
+  color: white;
+}
+
+#sidebar a:hover {
+  color: wheat;
+}
+
+#content {
+  margin-left: 0px;
+  padding: 16px;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#navbar {
+  background-color: var(--primary);
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  padding: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  /* gap: 50px; */
+}
+
+#navbar .right input ,button{
+  padding: 8px 13px;
+  border-radius: 4px;
+  border: none;
+  display: none;
+}
+
+#navbar .right button{
+ cursor: pointer;
+}
+
+.toggle-btn {
+  background-color: white;
+  border-radius: 4px;
+  padding: 4px 6px;
+  scale: 1.2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.content-dashboard{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.content-dashboard form {
+    display: flex;
+    flex-direction: column;
+   
+}
+.content-dashboard form input {
+    border: none;
+    background-color: rgba(255, 204, 109, 0.342);
+    padding: 10px 13px;
+    /* margin-top: 7px; */
+    color: black;
+}
+.content-dashboard form label {
+    margin-top:5px ;
+}
+.content-dashboard form textarea {
+    border: none;
+    background-color: rgba(255, 204, 109, 0.342);
+    padding: 10px 13px;
+    margin-top: 7px;
+    /* margin-bottom: 10px; */
+}
+.content-dashboard  input  {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding:8px 11px;
+    cursor: pointer;
+}
+ .content-dashboard form .submit{
+  background-color:var(--primary);
+    color: white;
+    margin-bottom: 10px;
+    border: none;
+    padding:8px 10px;
+    cursor: pointer;
+}
+table{
+  margin-top: 10px;
+}
+
+th{
+  background-color: var(--primary);
+  color: white;
+  padding: 5px 7px;
+}
+td{
+  padding: 5px 7px;
+}
+tr:hover td{
+background-color: rgb(226, 221, 221);
+}
+td button:nth-child(1) {
+  background-color: var(--primary);
+}
+ td button:nth-child(2) {
+  background-color: red;
+ }
+ #sidebar #btnLogout{
+  display: none;
+ }
+ 
+/* ipad atau Dekstop */
+@media (min-width: 768px) {
+  #sidebar {
+      display: block;
+  }
+
+  #content {
+      margin-left: 250px;
+  }
+
+  #navbar .right input ,button{
+      display: inline;
+  }
+
+  .toggle-btn {
+      padding: 1px 8px;
+  }
+ #sidebar a #btnLogout {
+    display: block;
+  }
+}
+
+

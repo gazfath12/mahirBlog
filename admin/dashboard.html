@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Mahir Blog</title>
+    <link rel="stylesheet" href="../styles/dashboard.css">
+</head>
+
+<body>
+    <div id="sidebar">
+        <a href="../index.html"><h2>Mahir Blog</h2></a>
+        <a href="#">Beranda</a>
+        <a href="./tambah-article.html">Tulis Artikel</a>
+        <a href="#">Pengaturan</a>
+        <a href="#" id="btnLogout" onclick="logoutBtn()">Logout</a>
+    </div>
+    <div id="content">
+        <div id="navbar">
+            <div class="toggle-btn" onclick="toggleSidebar()">&#9776</div>
+            <div class="right">
+                <input type="text" name="search" id="search" placeholder="Cari">
+                <button id="logout-btn" onclick="logoutBtn()">Logout</button>
+            </div>
+        </div>
+        <div>
+
+            <div class="content-dashboard">
+                <h1>Selamat Datang di Dashboard</h1>
+                <!-- modal content -->
+                <div class="modal" id="editModal">
+                    <div class="modal-content">
+                        <h2>Edit Article</h2>
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <form id="editArticle">
+                            <label for="judul">Masukan Judul</label>
+                            <input type="text" name="judul" id="title">
+                            <label for="penulis">Penulis</label>
+                            <input type="text" name="text" id="text">
+                            <label for="date">Tanggal</label>
+                            <input type="date" name="date" id="date">
+                            <label for="article">Tulis Article</label>
+                            <textarea name="tambah-article" id="tulisArticle" cols="30" rows="10"></textarea>
+                            <input class="submit" type="submit" value="Ubah Article" onclick="saveEditedArticle()">
+                        </form>
+
+                    </div>
+                </div>
+
+                <!-- table content -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Judul </th>
+                            <th>Penerbit</th>
+                            <th>Tanggal terbit</th>
+                            <th>Article</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        let editedIndex = -1;
+
+        const modal = document.getElementById("editModal")
+
+        function closeModal() {
+            modal.style.display = "none"
+
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            const articles = getArticleFromLocalStorage()
+            const tbody = document.getElementById("tbody")
+
+            articles.forEach((articles, index) => {
+                const userSession = getArticleFromLocalStorage()
+
+                if(!userSession) {
+                    window.location.href="../auth/login.html"
+                    alert("maaf harap login balik")
+                }
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                <td>${articles.judul}</td>
+                <td>${articles.write}</td>
+                <td>${articles.tanggal}</td>
+                <td>${articles.tulisArticle}</td>
+                <td>
+                    <button onclick="editArticle(${index})">Edit</button>
+                    <button onclick="hapusArticle(${index})">Delete</button>
+                </td>
+                `
+                tbody.append(tr)
+            })
+        })
+        function getSessionFromLocalStorange(){
+                const sessionJSON = localStorage.getItem("session")
+                return sessionJSON ? JSON.parse(sessionJSON) : null
+            }
+  
+        function editArticle(index) {
+            console.log(editArticle)
+            modal.style.display = "block"
+            const articles = getArticleFromLocalStorage()
+            editedIndex = index;
+            const editedArticle = articles[editedIndex]
+
+
+            document.getElementById("title").value = editedArticle.judul;
+            document.getElementById("text").value = editedArticle.write;
+            document.getElementById("date").value = editedArticle.tanggal;
+            document.getElementById("tulisArticle").value = editedArticle.tulisArticle
+
+        }
+        function saveEditedArticle(index) {
+            const judulInput = document.getElementById("title")
+            console.log(judulInput)
+            const writeInput = document.getElementById("text")
+            console.log(writeInput)
+            const dateInput = document.getElementById("date")
+            console.log(dateInput)
+            const tulisArticleInput = document.getElementById("tulisArticle")
+            console.log(tulisArticleInput)
+
+
+            const editedTitle = judulInput.value.trim()
+            console.log(editedTitle)
+            const editedWrite = writeInput.value.trim()
+            console.log(editedWrite)
+            const editDate = dateInput.value.trim()
+            console.log(editDate)
+            const editedArticle = tulisArticleInput.value.trim()
+            console.log(editedArticle)
+
+            if (editedTitle !== "" || editedWrite !== "" || editDate !== "" || editedArticle !== "") {
+                const articles = getArticleFromLocalStorage()
+                articles[editedIndex] = {
+                    judul: editedTitle,
+                    write: editedWrite,
+                    tanggal: editDate,
+                    tulisArticle: editedArticle
+                }
+                saveArticleFromLocalStorage(articles)
+                alert("artikel berhasil diedit")
+            } else {
+                alert("inputan tidak boleh kosong")
+            }
+        }
+
+        function hapusArticle(index) {
+            const articles = getArticleFromLocalStorage()
+            if (confirm("apakah anda ingin menghapus")) {
+                articles.splice(index, 1)
+                alert("data sudah dihapus")
+            } else {
+                alert("data tidak jadi dihapus")
+            }
+
+            saveArticleFromLocalStorage(articles)
+
+        }
+
+        function getArticleFromLocalStorage() {
+            const articlesJson = localStorage.getItem("articles")
+            return articlesJson ? JSON.parse(articlesJson) : []
+        }
+        function saveArticleFromLocalStorage(arg) {
+            localStorage.setItem("articles", JSON.stringify(arg))
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar")
+            const content = document.getElementById("content")
+            // const btnLogout = document.getElementById("btnLogout")
+
+            if (sidebar.style.width === "250px") {
+                sidebar.style.width = "0px"
+                content.style.marginLeft = "0px"
+                sidebar.style.display = "none"
+            } else {
+                sidebar.style.width = "250px"
+                sidebar.style.display = "block"
+                content.style.marginLeft = "250px"
+            }
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            const pindahSession = dapatkanSessionDariLocalStorage();
+            if (!pindahSession) {
+                alert("Anda belum login. Harap login terlebih dahulu.");
+                window.location.href = "../auth/login.html";
+            }
+        })
+        function logoutBtn() {
+            localStorage.removeItem("session");
+            alert("Logout berhasil.");
+            window.location.href = "../auth/login.html";
+        }
+
+        function dapatkanSessionDariLocalStorage() {
+            const sessionJSON = localStorage.getItem("session");
+            return sessionJSON ? JSON.parse(sessionJSON) : null;
+        }
+    </script>
+</body>
+
+</html>

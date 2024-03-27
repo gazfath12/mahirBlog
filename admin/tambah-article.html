@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article - Mahir Blog</title>
+    <link rel="stylesheet" href="../styles/dashboard.css">
+    <link rel="stylesheet" href="../styles/tambah-article.css">
+</head>
+
+<body>
+    <div id="sidebar">
+        <a href="../index.html">
+            <h2>Mahir Blog</h2>
+        </a>
+        <a href="./dashboard.html">Beranda</a>
+        <a href="#">Tulis Artikel</a>
+        <a href="#">Pengaturan</a>
+        <a href="#" id="btnLogout" onclick="logoutBtn()">Logout</a>
+    </div>
+    <div id="content">
+        <div id="navbar">
+            <div class="toggle-btn" onclick="toggleSidebar()">&#9776</div>
+            <div class="right">
+                <input type="text" name="search" id="search" placeholder="Cari">
+                <button id="logout-btn" onclick="logoutBtn()">Logout</button>
+            </div>
+        </div>
+        <div>
+            <div class="content-dashboard">
+                <h1>Tulis Article</h2>
+                    <form id="formArticle">
+                        <label for="judul">Masukan Judul</label>
+                        <input type="text" name="judul" id="title">
+                        <label for="penulis">Penulis</label>
+                        <input type="text" name="text" id="text">
+                        <label for="date">Tanggal</label>
+                        <input type="date" name="date" id="date">
+                        <label for="article">Tulis Article</label>
+                        <textarea name="tambah-article" id="tulisArticle" cols="30" rows="10"></textarea>
+                        <input class="submit" type="submit" value="Tambah Article">
+                    </form>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        const formArticle = document.getElementById("formArticle")
+        formArticle.addEventListener("submit", (event) => {
+            event.preventDefault()
+            function getSessionFromLocalStorange() {
+                const sessionJSON = localStorage.getItem("session")
+                return sessionJSON ? JSON.parse(sessionJSON) : null
+            }
+            document.addEventListener("DOMContentLoaded", () => {
+                const userSession = getArticleFromLocalStorage()
+
+                if (!userSession) {
+                    window.location.href = "../auth/login.html"
+                    alert("maaf harap login balik")
+                }
+            })
+            const judulInput = document.getElementById("title")
+            const writeInput = document.getElementById("text")
+            const dateInput = document.getElementById("date")
+            const tulisArticleInput = document.getElementById("tulisArticle")
+
+            const judul = judulInput.value.trim()
+            const write = writeInput.value.trim()
+            const tanggal = dateInput.value.trim()
+            const tulisArticle = tulisArticleInput.value.trim()
+            if (judul === "" || write === "" || tanggal === "" || tulisArticle === "") {
+                alert("inputan tidak boleh kosong")
+                document.forms["formArticle"].reset()
+            }
+            else {
+                const articles = getArticleFromLocalStorage()
+
+                articles.push({
+                    judul: judul,
+                    write: write,
+                    tanggal: tanggal,
+                    tulisArticle: tulisArticle
+                })
+                saveArticlesToLocalStorage(articles)
+                document.forms["formArticle"].reset()
+                alert("article berhasil ditambah kan")
+                window.location.href = "./dashboard.html"
+            }
+
+        });
+        function getArticleFromLocalStorage() {
+            const articleJson = localStorage.getItem("articles")
+            return articleJson ? JSON.parse(articleJson) : []
+        }
+        function saveArticlesToLocalStorage(arg) {
+            localStorage.setItem("articles", JSON.stringify(arg))
+        }
+
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar")
+            const content = document.getElementById("content")
+            // const btnLogout = document.getElementById("btnLogout")
+
+            if (sidebar.style.width === "250px") {
+                sidebar.style.width = "0px"
+                content.style.marginLeft = "0px"
+                sidebar.style.display = "none"
+            } else {
+                sidebar.style.width = "250px"
+                sidebar.style.display = "block"
+                content.style.marginLeft = "250px"
+            }
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            const pindahSession = dapatkanSessionDariLocalStorage();
+            if (!pindahSession) {
+                alert("Anda belum login. Harap login terlebih dahulu.");
+                window.location.href = "../auth/login.html";
+            }
+        })
+        function logoutBtn() {
+            localStorage.removeItem("session");
+            alert("Logout berhasil.");
+            window.location.href = "../auth/login.html";
+        }
+        function dapatkanSessionDariLocalStorage() {
+            const sessionJSON = localStorage.getItem("session");
+            return sessionJSON ? JSON.parse(sessionJSON) : null;
+        }
+
+
+    </script>
+</body>
+
+</html>

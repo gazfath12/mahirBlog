@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Account</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link rel="stylesheet" href="/styles/login.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="wrap-form" data-aos="zoom-in" data-aos-duration="1500">
+            <a href="../index.html" class="logo">
+                <h1>Mahir Blog</h1>
+            </a>
+            <div>
+                <h3>Login Your Account</h3>
+                <form id="loginForm">
+                    <label for="email"> Email</label>
+                    <input type="email" id="email" name="email" placeholder="Masukan Email" autocomplete="email">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Masukan Password"
+                        autocomplete="current-password">
+                    <input type="submit" value="Login">
+                    <span class="register">
+                        Belum Punya Akun <a href="./register.html">Register</a>
+                    </span>
+                </form>
+            </div>
+        </div>
+        <div class="wrap-img" data-aos="zoom-in-up" data-aos-duration="1500">
+            <img src="../asets/login]-svg.svg" alt="Login-img">
+        </div>
+    </div>
+
+    <script>
+        AOS.init();
+        const formLogin = document.getElementById("loginForm");
+        formLogin.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const emailInput = document.getElementById("email");
+            const passwordInput = document.getElementById("password");
+
+            const email = emailInput.value.trim()
+            const password = passwordInput.value.trim()
+
+            if (email === "" || password === "") {
+                alert("Email dan Password tidak boleh kosong!");
+                return;
+            }
+            const students = takeStudentsDariLocalStorage();
+            const authStudents = students.find(
+                (student) => student.email === email && student.password === password
+            );
+
+            if (authStudents) {
+                window.location.href = "../admin/dashboard.html";
+                createSession(authStudents);
+                alert("Login Succes");
+            } else {
+                alert("Email atau Password tidak sesuai");
+            }
+            document.forms["loginForm"].reset()
+        });
+
+        function takeStudentsDariLocalStorage() {
+            const studentsJSON = localStorage.getItem("students");
+            return studentsJSON ? JSON.parse(studentsJSON) : [];
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const students = takeStudentsDariLocalStorage();
+            const sessionStudent = putSessionStudentFormLocalStorage();
+
+            if (sessionStudent) {
+                alert("Anda sudah login, harap logout terlebih dahulu");
+                window.location.href = "../admin/dashboard.html";
+            }
+
+            saveStudentsKeLocalStorage(students);
+        });
+
+        function saveStudentsKeLocalStorage(arg) {
+            localStorage.setItem("students", JSON.stringify(arg));
+        }
+
+        function createSession(arg) {
+            localStorage.setItem("session", JSON.stringify({ email: arg.email }));
+        }
+
+        function putSessionStudentFormLocalStorage() {
+            const sessionJSON = localStorage.getItem("session");
+            return sessionJSON ? JSON.parse(sessionJSON) : null;
+        }
+
+
+    </script>
+</body>
+
+</html>
