@@ -6,7 +6,7 @@
     <title>Register Account</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <link rel="stylesheet" href="/styles/register.css">
+    <link rel="stylesheet" href="../styles/register.css">
 </head>
 <body>
     <div class="container">
@@ -54,7 +54,7 @@
             students.push({email: email,password: password})
             alert("akun berhasil ditambahkan")
             simpanStudentKeLocalStorage(students)
-            window.location = "./login.html"
+            window.location = "../auth/login.html"
         }
 
         document.forms["registerForm"].reset()
